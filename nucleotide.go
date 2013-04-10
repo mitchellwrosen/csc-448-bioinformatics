@@ -1,28 +1,43 @@
-package main
+package biology
 
 import (
 	"fmt"
 )
 
 const (
-	ADENINE  Nucleotide = 'A'
-	CYTOSINE Nucleotide = 'C'
-	GUANINE  Nucleotide = 'G'
-	THYMINE  Nucleotide = 'T'
+	Adenine  Nucleotide = 'A'
+	Cytosine Nucleotide = 'C'
+	Guanine  Nucleotide = 'G'
+	Thymine  Nucleotide = 'T'
 )
 
 type Nucleotide byte
 
-func (n Nucleotide) complement() Nucleotide {
+func NewNucleotide(b byte) (Nucleotide, error) {
+	switch b {
+	case 'A', 'a':
+		return Adenine, nil
+	case 'C', 'c':
+		return Cytosine, nil
+	case 'G', 'g':
+		return Guanine, nil
+	case 'T', 't':
+		return Thymine, nil
+	}
+
+	return Nucleotide(b), fmt.Errorf("Invalid nucleotide %c", b)
+}
+
+func (n Nucleotide) Complement() Nucleotide {
 	switch n {
-	case ADENINE:
-		return THYMINE
-	case CYTOSINE:
-		return GUANINE
-	case GUANINE:
-		return CYTOSINE
-	case THYMINE:
-		return ADENINE
+	case Adenine:
+		return Thymine
+	case Cytosine:
+		return Guanine
+	case Guanine:
+		return Cytosine
+	case Thymine:
+		return Adenine
 	}
 
 	panic("NOTREACHED")

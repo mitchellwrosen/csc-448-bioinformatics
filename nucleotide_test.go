@@ -1,27 +1,22 @@
-package main
+package biology
 
 import (
+	. "launchpad.net/gocheck"
 	"testing"
 )
 
-func TestNucleotideComplement(t *testing.T) {
-	nuc := ADENINE
-	if nuc.complement() != THYMINE {
-		t.Errorf("%c -> %c", nuc, nuc.complement())
-	}
+// Gocheck boiler plate
+func Test(t *testing.T) { TestingT(t) }
 
-	nuc = CYTOSINE
-	if nuc.complement() != GUANINE {
-		t.Errorf("%c -> %c", nuc, nuc.complement())
-	}
+type S struct{}
 
-	nuc = GUANINE
-	if nuc.complement() != CYTOSINE {
-		t.Errorf("%c -> %c", nuc, nuc.complement())
-	}
+var _ = Suite(&S{})
 
-	nuc = THYMINE
-	if nuc.complement() != ADENINE {
-		t.Errorf("%c -> %c", nuc, nuc.complement())
-	}
+////////////////////////////////////////////////////////////////////////////////
+
+func (s *S) TestNucleotideComplement(c *C) {
+	c.Check(ADENINE.Complement(), Equals, THYMINE)
+	c.Check(CYTOSINE.Complement(), Equals, GUANINE)
+	c.Check(THYMINE.Complement(), Equals, ADENINE)
+	c.Check(GUANINE.Complement(), Equals, CYTOSINE)
 }

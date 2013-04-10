@@ -1,48 +1,44 @@
-package main
+package biology
 
 import (
+	. "launchpad.net/gocheck"
 	"testing"
 )
 
-func TestSequenceComplement(t *testing.T) {
+// Gocheck boiler plate
+func Test(t *testing.T) { TestingT(t) }
+
+type S struct{}
+
+var _ = Suite(&S{})
+
+////////////////////////////////////////////////////////////////////////////////
+
+func (s *S) TestSequenceComplement(c *C) {
 	seq := newSequence('A', 'T', 'C', 'G')
-
-	comp := seq.complement()
-	if comp.String() != "TAGC" {
-		t.Errorf("%s complement -> %s (expected TAGC)", seq, comp)
-	}
-
-	revComp := seq.reverseComplement()
-	if revComp.String() != "CGAT" {
-		t.Errorf("%s reverse complement -> %s (expected CGAT)", seq, revComp)
-	}
+	c.Check(seq.complement().String(), Equals, "TAGC")
+	c.Check(seq.reverseComplement().String(), Equals, "CGAT")
 }
 
-func TestToAminoAcidSequences(t *testing.T) {
+func (s *S) TestToAminoAcidSequences(c *C) {
 	str := "TCTTAATCGAATCGAT"
 	seq := Sequence(str)
 
 	acids := seq.toAminoAcidSequences()
-	if len(acids) != 6 {
-		t.Fatalf("%d amino acid sequences (expected 6)", len(acids))
-	}
+	c.Assert(len(acids), Equals, 6)
+	c.Check(acids[0].String(), Equals, "S#SNR")
+	c.Check(acids[1].String(), Equals, "LNRID")
+	c.Check(acids[2].String(), Equals, "LIES")
+	c.Check(acids[3].String(), Equals, "IDSIK")
+	c.Check(acids[4].String(), Equals, "SIRLR")
+	c.Check(acids[5].String(), Equals, "RFD#")
+}
 
-	if acids[0].String() != "S#SNR" {
-		t.Errorf("%s frame 0: %s (expected S#SNR)", str, acids[0].String())
-	}
-	if acids[1].String() != "LNRID" {
-		t.Errorf("%s frame 1: %s (expected LNRID)", str, acids[1].String())
-	}
-	if acids[2].String() != "LIES" {
-		t.Errorf("%s frame 2: %s (expected LIES)", str, acids[2].String())
-	}
-	if acids[3].String() != "IDSIK" {
-		t.Errorf("%s reversed frame 0: %s (expected IDSIK)", str, acids[3].String())
-	}
-	if acids[4].String() != "SIRLR" {
-		t.Errorf("%s reversed frame 1: %s (expected SIRLR)", str, acids[4].String())
-	}
-	if acids[5].String() != "RFD#" {
-		t.Errorf("%s reversed frame 2: %s (expected RFD#)", str, acids[5].String())
-	}
+func (s *S) TestFindPalindromes(c *C) {
+	// TA, CG, GC, CG, TA, CGCG, ACGCGT, TACGCGTA
+	str := "TACGCGTA"
+	seq := Sequence(str)
+
+	palindromes := seq.findPalindromes()
+	c.Check(len(palindromes), Equals, 8)
 }

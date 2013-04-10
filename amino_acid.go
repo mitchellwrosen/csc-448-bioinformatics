@@ -1,180 +1,80 @@
-package main
+package biology
 
 // Amino acid names
 const (
-	ALANINE = iota
-	ARGININE
-	ASPARAGINE
-	ASPARTIC_ACID
-	CYSTEINE
-	GLUTAMIC_ACID
-	GLUTAMINE
-	GLYCINE
-	HISTIDINE
-	ISOLEUCINE
-	LEUCINE
-	LYSINE
-	METHIONINE
-	PHENYLALANINE
-	PROLINE
-	SERINE
-	THREONINE
-	TRYPTOPHAN
-	TYROSINE
-	VALINE
+	Alanine = iota
+	Arginine
+	Asparagine
+	AsparticAcid
+	Cysteine
+	GlutamicAcid
+	Glutamine
+	Glycine
+	Histidine
+	Isoleucine
+	Leucine
+	Lysine
+	Methionine
+	Phenylalanine
+	Proline
+	Serine
+	Threonine
+	Tryptophan
+	Tyrosine
+	Valine
 )
 
 type AminoAcid struct {
-	name  string
-	code3 string
-	code1 byte
+	Name         string
+	Code3        string
+	Code1        byte
+	Degeneration int
 }
 
-func newAminoAcid(seq Sequence) AminoAcid {
+func NewAminoAcid(seq Sequence) AminoAcid {
 	switch seq.String() {
-	case "TTT":
-		return AminoAcid{"Phenylalanine", "Phe", 'F'}
-	case "TTC":
-		return AminoAcid{"Phenylalanine", "Phe", 'F'}
-	case "TTA":
-		return AminoAcid{"Leucine", "Leu", 'L'}
-	case "TTG":
-		return AminoAcid{"Leucine", "Leu", 'L'}
-
-	case "TCT":
-		return AminoAcid{"Serine", "Ser", 'S'}
-	case "TCC":
-		return AminoAcid{"Serine", "Ser", 'S'}
-	case "TCA":
-		return AminoAcid{"Serine", "Ser", 'S'}
-	case "TCG":
-		return AminoAcid{"Serine", "Ser", 'S'}
-
-	case "TAT":
-		return AminoAcid{"Tyrosine", "Tyr", 'Y'}
-	case "TAC":
-		return AminoAcid{"Tyrosine", "Tyr", 'Y'}
-	case "TAA":
-		return AminoAcid{"STOP", "Sto", '#'}
-	case "TAG":
-		return AminoAcid{"STOP", "Sto", '#'}
-
-	case "TGT":
-		return AminoAcid{"Cysteine", "Cys", 'C'}
-	case "TGC":
-		return AminoAcid{"Cysteine", "Cys", 'C'}
-	case "TGA":
-		return AminoAcid{"STOP", "Sto", '#'}
-	case "TGG":
-		return AminoAcid{"Tryptophan", "Trp", 'W'}
-
-	case "CTT":
-		return AminoAcid{"Leucine", "Leu", 'L'}
-	case "CTC":
-		return AminoAcid{"Leucine", "Leu", 'L'}
-	case "CTA":
-		return AminoAcid{"Leucine", "Leu", 'L'}
-	case "CTG":
-		return AminoAcid{"Leucine", "Leu", 'L'}
-
-	case "CCT":
-		return AminoAcid{"Proline", "Pro", 'P'}
-	case "CCC":
-		return AminoAcid{"Proline", "Pro", 'P'}
-	case "CCA":
-		return AminoAcid{"Proline", "Pro", 'P'}
-	case "CCG":
-		return AminoAcid{"Proline", "Pro", 'P'}
-
-	case "CAT":
-		return AminoAcid{"Histidine", "His", 'H'}
-	case "CAC":
-		return AminoAcid{"Histidine", "His", 'H'}
-	case "CAA":
-		return AminoAcid{"Glutamine", "Gln", 'Q'}
-	case "CAG":
-		return AminoAcid{"Glutamine", "Gln", 'Q'}
-
-	case "CGT":
-		return AminoAcid{"Arginine", "Arg", 'R'}
-	case "CGC":
-		return AminoAcid{"Arginine", "Arg", 'R'}
-	case "CGA":
-		return AminoAcid{"Arginine", "Arg", 'R'}
-	case "CGG":
-		return AminoAcid{"Arginine", "Arg", 'R'}
-
-	case "ATT":
-		return AminoAcid{"Isoleucine", "Ile", 'I'}
-	case "ATC":
-		return AminoAcid{"Isoleucine", "Ile", 'I'}
-	case "ATA":
-		return AminoAcid{"Isoleucine", "Ile", 'I'}
+	case "GCT", "GCC", "GCA", "GCG":
+		return AminoAcid{"Alanine", "Ala", 'A', 4}
+	case "CGT", "CGC", "CGA", "CGG", "AGA", "AGG":
+		return AminoAcid{"Arginine", "Arg", 'R', 6}
+	case "AAT", "AAC":
+		return AminoAcid{"Asparagine", "Asn", 'N', 2}
+	case "GAT", "GAC":
+		return AminoAcid{"Aspartic acid", "Asp", 'D', 2}
+	case "TGT", "TGC":
+		return AminoAcid{"Cysteine", "Cys", 'C', 2}
+	case "GAA", "GAG":
+		return AminoAcid{"Glutamic acid", "Glu", 'E', 2}
+	case "CAA", "CAG":
+		return AminoAcid{"Glutamine", "Gln", 'Q', 2}
+	case "GGT", "GGC", "GGA", "GGG":
+		return AminoAcid{"Glycine", "Gly", 'G', 4}
+	case "CAT", "CAC":
+		return AminoAcid{"Histidine", "His", 'H', 2}
+	case "ATT", "ATC", "ATA":
+		return AminoAcid{"Isoleucine", "Ile", 'I', 3}
+	case "TTA", "TTG", "CTT", "CTC", "CTA", "CTG":
+		return AminoAcid{"Leucine", "Leu", 'L', 6}
+	case "AAA", "AAG":
+		return AminoAcid{"Lysine", "Lys", 'K', 2}
 	case "ATG":
-		return AminoAcid{"Methionine", "Met", 'M'}
-
-	case "ACT":
-		return AminoAcid{"Threonine", "Thr", 'T'}
-	case "ACC":
-		return AminoAcid{"Threonine", "Thr", 'T'}
-	case "ACA":
-		return AminoAcid{"Threonine", "Thr", 'T'}
-	case "ACG":
-		return AminoAcid{"Threonine", "Thr", 'T'}
-
-	case "AAT":
-		return AminoAcid{"Asparagine", "Asn", 'N'}
-	case "AAC":
-		return AminoAcid{"Asparagine", "Asn", 'N'}
-	case "AAA":
-		return AminoAcid{"Lysine", "Lys", 'K'}
-	case "AAG":
-		return AminoAcid{"Lysine", "Lys", 'K'}
-
-	case "AGT":
-		return AminoAcid{"Serine", "Ser", 'S'}
-	case "AGC":
-		return AminoAcid{"Serine", "Ser", 'S'}
-	case "AGA":
-		return AminoAcid{"Arginine", "Arg", 'R'}
-	case "AGG":
-		return AminoAcid{"Arginine", "Arg", 'R'}
-
-	case "GTT":
-		return AminoAcid{"Valine", "Val", 'V'}
-	case "GTC":
-		return AminoAcid{"Valine", "Val", 'V'}
-	case "GTA":
-		return AminoAcid{"Valine", "Val", 'V'}
-	case "GTG":
-		return AminoAcid{"Valine", "Val", 'V'}
-
-	case "GCT":
-		return AminoAcid{"Alanine", "Ala", 'A'}
-	case "GCC":
-		return AminoAcid{"Alanine", "Ala", 'A'}
-	case "GCA":
-		return AminoAcid{"Alanine", "Ala", 'A'}
-	case "GCG":
-		return AminoAcid{"Alanine", "Ala", 'A'}
-
-	case "GAT":
-		return AminoAcid{"Aspartic acid", "Asp", 'D'}
-	case "GAC":
-		return AminoAcid{"Aspartic acid", "Asp", 'D'}
-	case "GAA":
-		return AminoAcid{"Glutamic acid", "Glu", 'E'}
-	case "GAG":
-		return AminoAcid{"Glutamic acid", "Glu", 'E'}
-
-	case "GGT":
-		return AminoAcid{"Glycine", "Gly", 'G'}
-	case "GGC":
-		return AminoAcid{"Glycine", "Gly", 'G'}
-	case "GGA":
-		return AminoAcid{"Glycine", "Gly", 'G'}
-	case "GGG":
-		return AminoAcid{"Glycine", "Gly", 'G'}
+		return AminoAcid{"Methionine", "Met", 'M', 1}
+	case "TTT", "TTC":
+		return AminoAcid{"Phenylalanine", "Phe", 'F', 2}
+	case "CCT", "CCC", "CCA", "CCG":
+		return AminoAcid{"Proline", "Pro", 'P', 4}
+	case "TCT", "TCC", "TCA", "TCG", "AGT", "AGC":
+		return AminoAcid{"Serine", "Ser", 'S', 6}
+	case "TAA", "TAG", "TGA":
+		return AminoAcid{"STOP", "Sto", '#', 3}
+	case "ACT", "ACC", "ACA", "ACG":
+		return AminoAcid{"Threonine", "Thr", 'T', 4}
+	case "TGG":
+		return AminoAcid{"Tryptophan", "Trp", 'W', 1}
+	case "TAT", "TAC":
+		return AminoAcid{"Tyrosine", "Tyr", 'Y', 2}
+	case "GTT", "GTC", "GTA", "GTG":
+		return AminoAcid{"Valine", "Val", 'V', 4}
 	}
 
 	panic("NOTREACHED")
